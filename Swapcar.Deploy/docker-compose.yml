@@ -1,0 +1,15 @@
+version: '2'
+services:
+  dotnet-swapcar-backend-service-1:
+    image: docker-repository/dotnet-swapcar-backend-service:version-number
+    container_name: dotnet-swapcar-backend-service-1
+    restart: always
+    ports:
+      - "65110:65110"
+    environment:
+      - LTTNG_UST_REGISTER_TIMEOUT=0
+          
+networks:
+  default:
+    external:
+      name:  docker-network

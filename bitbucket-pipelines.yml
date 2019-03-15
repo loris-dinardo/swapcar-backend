@@ -1,0 +1,82 @@
+# Bitbucket Pipeline for SWAPCAR GRAPHQL API
+# -----
+image: microsoft/dotnet:sdk
+
+options:
+    docker: true
+
+pipelines:
+    tags:
+        'build-v*.*-*':
+            - step: 
+                name: Build Projects and Docker Images
+                artifacts:
+                    - publish/
+                script: 
+                    # Publish all the projects
+                    - dotnet publish $SWAPCAR_PROJ -c Release -o ../publish/$SWAPCAR_PROJ
+                    #
+                    # Docker registry connection
+                    - docker login $DOCKER_REGISTRY -u $DOCKER_USER -p $DOCKER_PASS
+                    # Docker build/tag/push image 
+                    - cd publish/$SWAPCAR_PROJ
+                    - docker build -f ./Dockerfile.dev -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$BITBUCKET_TAG -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:latest .
+                    - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME
+                    # Docker registry disconnection
+                    - docker logout $DEV_DOCKER_REGISTRY
+            
+            - step:
+                name: Deploy Docker Images
+                deployment: Staging
+                artifacts:
+                    - publish/
+                script:
+                    # Create Deploy Image
+                    - cd $DEPLOY_PROJ
+                    - docker build -f ./Dockerfile -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME_DEPLOY:$BITBUCKET_TAG -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME_DEPLOY:latest 
+                      --build-arg portainer_user=$PORTAINER_USER 
+                      --build-arg portainer_password=$PORTAINER_PWD 
+                      --build-arg portainer_url=$PORTAINER_URL 
+                      --build-arg swapcar_stack=$DEV_STACK_NAME 
+                      --build-arg swapcar_docker_repo=$DOCKER_REGISTRY 
+                      --build-arg swapcar_docker_network=$DEV_DOCKER_NETWORK 
+                      --build-arg swapcar_version=$BITBUCKET_TAG 
+                      --no-cache .
+                    - docker run $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME_DEPLOY
+        v*.*.*:
+            - step: 
+                name: Build Projects and Docker Images
+                artifacts:
+                    - publish/
+                script: 
+                    # Publish all the projects
+                    - dotnet publish $SWAPCAR_PROJ -c Release -o ../publish/$SWAPCAR_PROJ
+                    #
+                    # Docker registry connection
+                    - docker login $DOCKER_REGISTRY -u $DOCKER_USER -p $DOCKER_PASS
+                    # Docker build/tag/push image 
+                    - cd publish/$SWAPCAR_PROJ
+                    - docker build -f ./Dockerfile.dev -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$BITBUCKET_TAG -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:latest .
+                    - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME
+                    # Docker registry disconnection
+                    - docker logout $DEV_DOCKER_REGISTRY
+                    
+            - step:
+                name: Deploy Docker Images
+                deployment: Production
+                trigger: manual
+                artifacts:
+                    - publish/
+                script:
+                    # Create Deploy Image
+                    - cd $DEPLOY_PROJ
+                    - docker build -f ./Dockerfile -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME_DEPLOY:$BITBUCKET_TAG -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME_DEPLOY:latest 
+                      --build-arg portainer_user=$PORTAINER_USER 
+                      --build-arg portainer_password=$PORTAINER_PWD 
+                      --build-arg portainer_url=$PORTAINER_URL 
+                      --build-arg swapcar_stack=$PROD_STACK_NAME 
+                      --build-arg swapcar_docker_repo=$DOCKER_REGISTRY 
+                      --build-arg swapcar_docker_network=$PROD_DOCKER_NETWORK 
+                      --build-arg swapcar_version=$BITBUCKET_TAG 
+                      --no-cache .
+                    - docker run $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME_DEPLOY

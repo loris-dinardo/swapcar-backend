@@ -1,0 +1,15 @@
+FROM microsoft/dotnet:2.1.1-aspnetcore-runtime
+MAINTAINER SWAPIN Sàrl
+
+# Create directory for the app source code
+RUN mkdir -p /srv/src/api
+WORKDIR /srv/src/api
+
+# Copy the source and restore dependencies
+ADD . /srv/src/api
+COPY settings/appsettings_dev.json appsettings.json
+RUN chown -R root:root /srv/src/api && chmod -R 644 /srv/src/api
+
+# Expose the port and start the app
+EXPOSE 65110
+ENTRYPOINT [ "dotnet", "Swapcar.GraphQL.dll" ]
