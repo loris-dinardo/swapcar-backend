@@ -8,8 +8,10 @@ services:
       - "65110:65110"
     environment:
       - LTTNG_UST_REGISTER_TIMEOUT=0
-          
+    networks:
+      - env-pgdb-auth-network
+      
 networks:
-  default:
+  env-pgdb-auth-network:
     external:
       name:  docker-network
