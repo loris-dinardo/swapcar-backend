@@ -23,7 +23,7 @@ pipelines:
                     - docker build -f ./Dockerfile.dev -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$BITBUCKET_TAG -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:latest .
                     - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME
                     # Docker registry disconnection
-                    - docker logout $DEV_DOCKER_REGISTRY
+                    - docker logout $DOCKER_REGISTRY
             
             - step:
                 name: Deploy Docker Images
@@ -59,7 +59,7 @@ pipelines:
                     - docker build -f ./Dockerfile.dev -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$BITBUCKET_TAG -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:latest .
                     - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME
                     # Docker registry disconnection
-                    - docker logout $DEV_DOCKER_REGISTRY
+                    - docker logout $DOCKER_REGISTRY
                     
             - step:
                 name: Deploy Docker Images
