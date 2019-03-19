@@ -5,12 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Dicos\EntityFramework\Contexts\" />
+    <Folder Include="Dicos\EntityFramework\Repositories\" />
+    <Folder Include="Dicos\Extensions\" />
     <Folder Include="wwwroot\" />
     <Folder Include="settings\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="GraphQL" Version="2.4.0" />
+    <PackageReference Include="GraphQL.Server.Transports.AspNetCore" Version="3.4.0" />
+    <PackageReference Include="GraphQL.Server.Ui.Playground" Version="3.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
