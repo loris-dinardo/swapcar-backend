@@ -9,6 +9,7 @@ namespace Swapcar.GraphQL.Dicos.Api.GraphQL.Types
         {
             Field(x => x.Id);
             Field(x => x.Name);
+            Field(x => x.CarModelId);
         }
     }
 }

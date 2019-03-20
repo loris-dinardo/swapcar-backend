@@ -10,6 +10,7 @@ namespace Swapcar.GraphQL.Dicos.Api.GraphQL.Types
         {
             Field(x => x.Id);
             Field(x => x.Name);
+            Field(x => x.CarBrandId);
             Field<ListGraphType<CarVersionType>, IEnumerable<CarModel>>()
             .Name("Versions");
         }

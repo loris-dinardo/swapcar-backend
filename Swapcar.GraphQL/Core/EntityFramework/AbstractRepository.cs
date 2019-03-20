@@ -1,98 +1,125 @@
-﻿using Swapcar.GraphQL.Core.Domain.Model;
+﻿using Microsoft.EntityFrameworkCore;
+using Swapcar.GraphQL.Core.Domain.Model;
 using Swapcar.GraphQL.Core.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Swapcar.GraphQL.Core.EntityFramework
 {
-    public abstract class AbstractRepository<KeyType, Entity> : IRepository<KeyType, Entity>
+    public abstract class AbstractRepository<KeyType, Entity> : IRepository<KeyType, Entity> where Entity : class
     {
-        protected DbContext _ctx { get; } 
+        protected AppDbContext _ctx { get; } 
+        protected DbSet<Entity> _dbSet { get; }
 
-        public AbstractRepository(DbContext context)
+        public AbstractRepository(AppDbContext context)
         {
             _ctx = context;
+            _dbSet = _ctx.Set<Entity>();
         }
 
         public abstract KeyType GetId(Entity e);
 
-        public Entity Add(Entity e)
+        public async Task<Entity> Add(Entity e)
         {
             try
             {
-                /*
-                KeyType k = GetId(e);
-                _ctx.DbSet(typeof(Entity)).Add(e);
+                var addedEntity = await _dbSet.AddAsync(e);
+                await _ctx.SaveChangesAsync();
 
-                return _ctx.DbSet(e).FirstOrDefault(x => x.GetId().Equals(k));
-                */
-                return default(Entity);
+                return addedEntity.Entity;
 
-            } catch (ArgumentException ex)
+            } catch (InvalidOperationException ex)
             {
-                throw new RepositoryException(ex);
+                throw new RepositoryException($"Error attempting to add a new element : {e.ToString()}", ex);
             }
         }
 
-        public List<Entity> FindAll()
+        public async Task<List<Entity>> FindAll()
         {
             try
             {
-                return _ctx.DbSet(typeof(Entity)) as List<Entity>;
-
+                return await _dbSet.AsNoTracking().ToListAsync();
             }
-            catch (ArgumentException ex)
+            catch (InvalidOperationException ex)
             {
-                throw new RepositoryException(ex);
+                throw new RepositoryException("Error attempting to find all elements", ex);
             }
         }
 
-        public Entity FindById(KeyType id)
+        public async Task<Entity> FindById(KeyType id)
         {
             try
             {
-                return default(Entity);//_ctx.DbSet(typeof(Entity)).FirstOrDefault(x => x.GetId().Equals(id));
+                return await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => GetId(x).Equals(id));
             }
-            catch (ArgumentException ex)
+            catch (InvalidOperationException ex)
             {
-                throw new RepositoryException(ex);
+                throw new RepositoryException($"Error attempting to find element at index {id}", ex);
             }
         }
 
-        public void Remove(KeyType id)
+        public async void Remove(KeyType id)
         {
             try
             {
-                //Entity e = _ctx.DbSet(typeof(Entity)).FirstOrDefault(x => x.GetId().Equals(id));
-                //_ctx.DbSet(typeof(Entity)).Remove(e);
+                var entityToRemove = await FindById(id);
+                _dbSet.Remove(entityToRemove);
 
+                await _ctx.SaveChangesAsync();
             }
-            catch (ArgumentException ex)
+            catch (InvalidOperationException ex)
             {
-                throw new RepositoryException(ex);
+                throw new RepositoryException($"Error attempting to remove element at index {id}", ex);
             }
         }
 
-        public Entity Update(Entity e)
+        public async Task<Entity> Update(Entity e)
         {
             try
             {
-                /*
-                KeyType k = GetId(e);
-                var index = _ctx.DbSet(typeof(Entity)).FindIndex(x => GetId(x).Equals(k));
+                var modifiedEntity = _dbSet.Update(e);
+                await _ctx.SaveChangesAsync();
+               
+                return modifiedEntity.Entity;
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new RepositoryException($"Error attempting to add a new element : {e.ToString()}", ex);
+            }
+        }
 
-                if (index >= 0)
+        public IQueryable<Entity> FindAllByPredicate(params Expression<Func<Entity, object>>[] includes)
+        {
+            try
+            {
+                IQueryable<Entity> set = _dbSet.AsNoTracking();
+
+                foreach (var include in includes)
                 {
-                    _ctx.DbSet(typeof(Entity))[index] = e;
+                    set = set.Include(include);
                 }
 
-                return e;
-                */
-                return default(Entity);
+                return set.AsQueryable<Entity>();
             }
-            catch (ArgumentException ex)
+            catch (InvalidOperationException ex)
             {
-                throw new RepositoryException(ex);
+                throw new RepositoryException("Error attempting to find all elements by predicate", ex);
+            }
+        }
+
+        public async Task<Entity> FindBy(Expression<Func<Entity, bool>> predicate, params Expression<Func<Entity, object>>[] includes)
+        {
+            try
+            {
+                var result = FindAllByPredicate(includes);
+                return await result.FirstOrDefaultAsync(predicate);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new RepositoryException("Error attempting to find elements by predicate", ex);
             }
         }
     }
