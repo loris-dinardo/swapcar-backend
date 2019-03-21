@@ -38,8 +38,7 @@ namespace Swapcar.GraphQL
                 // CORE EXTENSIONS
                 .UseCoreDebug(Configuration, env, loggerFactory)
                 .UseCoreGraphQLPlayGround()
-                // DICOS EXTENSIONS
-                .UseDicosGraphQLSchemas();
+                .UseCoreGraphQLSchema();
         }
     }
 }

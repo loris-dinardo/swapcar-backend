@@ -1,11 +1,12 @@
 ﻿using GraphQL.Types;
+using Swapcar.GraphQL.Core.Api.GraphQL.Queries;
 using Swapcar.GraphQL.Dicos.Api.GraphQL.Types;
 using Swapcar.GraphQL.Dicos.Domain.Models;
 using Swapcar.GraphQL.Dicos.EntityFramework.Repositories;
 
 namespace Swapcar.GraphQL.Dicos.Api.GraphQL.Queries
 {
-    public class CarVersionMutation : ObjectGraphType
+    public class CarVersionMutation : ObjectGraphType, ICoreGraphMutationIncluder
     {
         public CarVersionMutation(CarVersionRepository versionRepository)
         {

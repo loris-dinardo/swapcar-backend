@@ -1,12 +1,13 @@
 ﻿using GraphQL;
 using GraphQL.Types;
+using Swapcar.GraphQL.Core.Api.GraphQL.Queries;
 using Swapcar.GraphQL.Dicos.Api.GraphQL.Types;
 using Swapcar.GraphQL.Dicos.EntityFramework.Repositories;
 using System.Collections.Generic;
 
 namespace Swapcar.GraphQL.Dicos.Api.GraphQL.Queries
 {
-    public class CarBrandQuery : ObjectGraphType
+    public class CarBrandQuery : ObjectGraphType, ICoreGraphQueryIncluder
     {
         public CarBrandQuery(CarBrandRepository brandRepository)
         {

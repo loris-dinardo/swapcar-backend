@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Swapcar.GraphQL.Dicos.Api.GraphQL.Schemas;
+using Swapcar.GraphQL.Core.Api.GraphQL.Queries;
+using Swapcar.GraphQL.Dicos.Api.GraphQL.Queries;
 using Swapcar.GraphQL.Dicos.EntityFramework.Repositories;
 
 namespace Swapcar.GraphQL.Dicos.Extensions
@@ -23,9 +24,13 @@ namespace Swapcar.GraphQL.Dicos.Extensions
          *************************************/
         public static IServiceCollection AddDicosGraphQLSchemas(this IServiceCollection services)
         {
-            services.AddScoped<CarBrandSchema>();
-            services.AddScoped<CarModelSchema>();
-            services.AddScoped<CarVersionSchema>();
+            services.AddScoped<ICoreGraphQueryIncluder, CarBrandQuery>();
+            services.AddScoped<ICoreGraphQueryIncluder, CarModelQuery>();
+            services.AddScoped<ICoreGraphQueryIncluder, CarVersionQuery>();
+
+            services.AddScoped<ICoreGraphMutationIncluder, CarBrandMutation>();
+            services.AddScoped<ICoreGraphMutationIncluder, CarModelMutation>();
+            services.AddScoped<ICoreGraphMutationIncluder, CarVersionMutation>();
 
             return services;
         }

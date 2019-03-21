@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Swapcar.GraphQL.Core.EntityFramework;
 using GraphQL;
 using GraphQL.Server;
+using Swapcar.GraphQL.Core.Api.GraphQL.Schemas;
 
 namespace Swapcar.GraphQL.Core.Extensions
 {
@@ -35,6 +36,8 @@ namespace Swapcar.GraphQL.Core.Extensions
                 x.ExposeExceptions = inDevMod; //set true only in dev mode.
             })
             .AddGraphTypes(ServiceLifetime.Scoped);
+
+            services.AddScoped<CoreGraphSchema>();
 
             return services;
         }
