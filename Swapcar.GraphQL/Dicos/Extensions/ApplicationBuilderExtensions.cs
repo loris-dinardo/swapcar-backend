@@ -12,6 +12,8 @@ namespace Swapcar.GraphQL.Dicos.Extensions
         public static IApplicationBuilder UseDicosGraphQLSchemas(this IApplicationBuilder app)
         {
             app.UseGraphQL<CarBrandSchema>();
+            app.UseGraphQL<CarModelSchema>();
+            app.UseGraphQL<CarVersionSchema>();
 
             return app;
         }

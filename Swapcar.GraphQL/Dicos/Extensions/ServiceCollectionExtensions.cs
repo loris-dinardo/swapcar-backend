@@ -9,10 +9,11 @@ namespace Swapcar.GraphQL.Dicos.Extensions
         /*************************************
          * REPOSITORIES EXTENSIONS 
          *************************************/
-        public static IServiceCollection AddDicosRepositoriesConfiguration(this IServiceCollection services)
+        public static IServiceCollection AddDicosRepositories(this IServiceCollection services)
         {
-            // AuthClientRepository used by UserSessionManager
             services.AddScoped<CarBrandRepository>();
+            services.AddScoped<CarModelRepository>();
+            services.AddScoped<CarVersionRepository>();
 
             return services;
         }
@@ -23,6 +24,8 @@ namespace Swapcar.GraphQL.Dicos.Extensions
         public static IServiceCollection AddDicosGraphQLSchemas(this IServiceCollection services)
         {
             services.AddScoped<CarBrandSchema>();
+            services.AddScoped<CarModelSchema>();
+            services.AddScoped<CarVersionSchema>();
 
             return services;
         }

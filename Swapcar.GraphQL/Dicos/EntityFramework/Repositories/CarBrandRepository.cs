@@ -29,7 +29,23 @@ namespace Swapcar.GraphQL.Dicos.EntityFramework.Repositories
             }
             catch (InvalidOperationException ex)
             {
-                throw new RepositoryException("Error attempting to find all elements", ex);
+                throw new RepositoryException("Error attempting to find all elements with all sub lists included", ex);
+            }
+        }
+
+        public async Task<CarBrand> FindByIdEager(int id)
+        {
+            try
+            {
+                return await _dbSet
+                    .AsNoTracking()
+                    .Include(b => b.Models)
+                        .ThenInclude(m => m.Versions)
+                    .FirstOrDefaultAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new RepositoryException($"Error attempting to find element {id} with all sub lists included", ex);
             }
         }
     }

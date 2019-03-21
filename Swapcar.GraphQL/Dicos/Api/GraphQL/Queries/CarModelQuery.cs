@@ -6,17 +6,17 @@ using System.Collections.Generic;
 
 namespace Swapcar.GraphQL.Dicos.Api.GraphQL.Queries
 {
-    public class CarBrandQuery : ObjectGraphType
+    public class CarModelQuery : ObjectGraphType
     {
-        public CarBrandQuery(CarBrandRepository brandRepository)
+        public CarModelQuery(CarModelRepository modelRepository)
         {
-            Field<ListGraphType<CarBrandType>>("brands",
+            Field<ListGraphType<CarModelType>>("models",
                 resolve: context =>
                 {
-                    return brandRepository.FindAllEager();
+                    return modelRepository.FindAllByPredicate(x => x.Versions);
                 });
 
-            Field<CarBrandType>("brand",
+            Field<CarModelType>("model",
                 arguments: new QueryArguments(new List<QueryArgument>
                 {
                     new QueryArgument<IdGraphType>
@@ -29,11 +29,11 @@ namespace Swapcar.GraphQL.Dicos.Api.GraphQL.Queries
                     var id = context.GetArgument<int>("id");
                     if (id <= 0)
                     {
-                        context.Errors.Add(new ExecutionError("Brand Id is invalid or missing"));
+                        context.Errors.Add(new ExecutionError("Model Id is invalid or missing"));
                         return null;
                     }
 
-                    return brandRepository.FindByIdEager(id);
+                    return modelRepository.FindBy(x => x.Id == id, x => x.Versions);
                 });
         }
     }

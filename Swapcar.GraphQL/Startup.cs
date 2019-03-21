@@ -26,7 +26,7 @@ namespace Swapcar.GraphQL
                 .AddCoreDatabaseConfiguration(Configuration)
                 .AddCoreGraphQLConfiguration(HostingEnv.IsDevelopment())
                 // DICOS EXTENSIONS
-                .AddDicosRepositoriesConfiguration()
+                .AddDicosRepositories()
                 .AddDicosGraphQLSchemas();
 
         }
