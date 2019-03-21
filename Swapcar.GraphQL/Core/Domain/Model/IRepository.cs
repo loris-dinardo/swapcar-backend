@@ -10,7 +10,7 @@ namespace Swapcar.GraphQL.Core.Domain.Model
     {
         Task<Entity> Add(Entity e);
 
-        void Remove(KeyType id);
+        Task Remove(KeyType id);
 
         Task<Entity> FindById(KeyType id);
 

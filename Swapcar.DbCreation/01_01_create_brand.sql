@@ -50,8 +50,7 @@ CREATE TABLE brand.model(
 			 model_id int4 NOT NULL DEFAULT nextval('brand.model_seq'::regclass),
 			 name varchar(255), 
 			 brand_id int4,
-CONSTRAINT	 model_pkey PRIMARY KEY (model_id),
-CONSTRAINT	 brand_fkey FOREIGN KEY (brand_id) REFERENCES brand.brand(brand_id)
+CONSTRAINT	 model_pkey PRIMARY KEY (model_id)
 );
 
 -- Car Versions
@@ -60,6 +59,20 @@ CREATE TABLE brand.version(
 			 version_id int4 NOT NULL DEFAULT nextval('brand.version_seq'::regclass),
 			 name varchar(255),
 			 model_id int4,
-CONSTRAINT	 version_pkey PRIMARY KEY (version_id),
-CONSTRAINT	 model_fkey FOREIGN KEY (model_id) REFERENCES brand.model(model_id)
+CONSTRAINT	 version_pkey PRIMARY KEY (version_id)
 );
+
+-------------------------------------------------- Create brand constraints
+-- Car Models
+ALTER TABLE brand.model
+ADD CONSTRAINT brand_fkey
+FOREIGN KEY (brand_id)
+REFERENCES brand.brand(brand_id)
+ON DELETE CASCADE;
+
+-- Car Versions
+ALTER TABLE brand.version
+ADD CONSTRAINT model_fkey
+FOREIGN KEY (model_id)
+REFERENCES brand.model(model_id)
+ON DELETE CASCADE;

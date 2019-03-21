@@ -61,11 +61,11 @@ namespace Swapcar.GraphQL.Core.EntityFramework
             }
         }
 
-        public async void Remove(KeyType id)
+        public async Task Remove(KeyType id)
         {
             try
             {
-                var entityToRemove = await FindById(id);
+                var entityToRemove = await _dbSet.FirstOrDefaultAsync(x => GetId(x).Equals(id));
                 _dbSet.Remove(entityToRemove);
 
                 await _ctx.SaveChangesAsync();

@@ -8,8 +8,8 @@ namespace Swapcar.GraphQL.Core.EntityFramework
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {}
 
-        public DbSet<CarBrand> brands { get; set; }
-        public DbSet<CarModel> models { get; set; }
-        public DbSet<CarVersion> versions { get; set; }
+        public DbSet<CarBrand> Brands { get; set; }
+        public DbSet<CarModel> Models { get; set; }
+        public DbSet<CarVersion> Versions { get; set; }
     }
 }
