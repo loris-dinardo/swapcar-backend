@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swapcar.GraphQL.Core.Extensions;
 using Swapcar.GraphQL.Dicos.Extensions;
+using Swapcar.GraphQL.Users.Extensions;
 
 namespace Swapcar.GraphQL
 {
@@ -27,7 +28,10 @@ namespace Swapcar.GraphQL
                 .AddCoreGraphQLConfiguration(HostingEnv.IsDevelopment())
                 // DICOS EXTENSIONS
                 .AddDicosRepositories()
-                .AddDicosGraphQLSchemas();
+                .AddDicosGraphQLSchemas()
+                // USERS EXTENSIONS
+                .AddUsersRepositories()
+                .AddUsersGraphQLSchemas();
 
         }
 
