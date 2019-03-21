@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1.1-aspnetcore-runtime
+FROM microsoft/dotnet:2.2.0-aspnetcore-runtime
 MAINTAINER SWAPIN Sàrl
 
 # Create directory for the app source code
