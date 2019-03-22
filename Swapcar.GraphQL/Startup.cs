@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swapcar.GraphQL.Commercials.Extensions;
 using Swapcar.GraphQL.Core.Extensions;
 using Swapcar.GraphQL.Dicos.Extensions;
 using Swapcar.GraphQL.Users.Extensions;
@@ -31,8 +32,10 @@ namespace Swapcar.GraphQL
                 .AddDicosGraphQLSchemas()
                 // USERS EXTENSIONS
                 .AddUsersRepositories()
-                .AddUsersGraphQLSchemas();
-
+                .AddUsersGraphQLSchemas()
+                // COMMERCIALS EXTENSIONS
+                .AddCommercialsRepositories()
+                .AddCommercialsGraphQLSchemas();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
