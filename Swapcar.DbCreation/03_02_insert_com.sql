@@ -1,0 +1,25 @@
+-- type: INSERT
+-- user: LD
+-- created: 22/3/2019
+
+-- SEARCH
+INSERT INTO com.search VALUES ( 1,1,1,2,4,10000,30000,2010,2019,1000,10000, '2019-03-13 12:00:00');
+INSERT INTO com.search VALUES ( 2,1,3,5,10,5000,25000,2005,2015,5000,50000,'2019-03-14 12:00:00');
+INSERT INTO com.search VALUES ( 3,2,2,4,8,0,10000,1998,2015,0,50000,'2019-03-15 12:00:00');
+INSERT INTO com.search VALUES ( 4,3,3,6,12,0,20000,2009,2017,0,75000,'2019-03-16 12:00:00');
+
+-- SELL
+INSERT INTO com.sell VALUES ( 1,1,2,3,6, 3000, 1997, 150000, '2019-03-13 12:40:00');
+INSERT INTO com.sell VALUES ( 2,2,1,1,1, 9500, 2008, 75000, '2019-03-14 12:40:00');
+INSERT INTO com.sell VALUES ( 3,4,3,5,10,28000,1967, 185000, '2019-03-15 12:40:00');
+
+-- TRADE IN
+INSERT INTO com.trade_in VALUES ( 1,1,1, '2019-03-14 12:30:00');
+INSERT INTO com.trade_in VALUES ( 2,2,2, '2019-03-15 12:30:00');
+
+
+-- UPDATE SEQUENCE
+SELECT setval('com.search_seq', (SELECT MAX(search_id) FROM com.search));
+SELECT setval('com.sell_seq', (SELECT MAX(sell_id) FROM com.sell));
+SELECT setval('com.trade_in_seq', (SELECT MAX(trade_in_id) FROM com.trade_in));
+

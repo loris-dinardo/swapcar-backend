@@ -34,6 +34,7 @@ CREATE TABLE auth.user(
 			 nickname varchar(255),
 			 hash_password varchar(255),
 			 salt varchar(255),
+			 creation_date timestamp with time zone,
 CONSTRAINT   user_pkey PRIMARY KEY (user_id)
 );
 
@@ -50,7 +51,7 @@ CONSTRAINT	 profile_pkey PRIMARY KEY (profile_id)
 -------------------------------------------------- Create auth constraints
 -- Profiles
 ALTER TABLE auth.profile
-ADD CONSTRAINT user_fkey
+ADD CONSTRAINT profile_user_fkey
 FOREIGN KEY (user_id)
 REFERENCES auth.user(user_id)
 ON DELETE CASCADE;

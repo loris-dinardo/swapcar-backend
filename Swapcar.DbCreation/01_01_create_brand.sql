@@ -65,14 +65,14 @@ CONSTRAINT	 version_pkey PRIMARY KEY (version_id)
 -------------------------------------------------- Create brand constraints
 -- Car Models
 ALTER TABLE brand.model
-ADD CONSTRAINT brand_fkey
+ADD CONSTRAINT model_brand_fkey
 FOREIGN KEY (brand_id)
 REFERENCES brand.brand(brand_id)
 ON DELETE CASCADE;
 
 -- Car Versions
 ALTER TABLE brand.version
-ADD CONSTRAINT model_fkey
+ADD CONSTRAINT version_model_fkey
 FOREIGN KEY (model_id)
 REFERENCES brand.model(model_id)
 ON DELETE CASCADE;

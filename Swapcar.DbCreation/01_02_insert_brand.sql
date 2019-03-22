@@ -29,3 +29,8 @@ INSERT INTO brand.version VALUES ( 10,'GT, 2.6, 250Cv',5);
 INSERT INTO brand.version VALUES ( 11,'ST, 2.0, 150Cv',6);
 INSERT INTO brand.version VALUES ( 12,'RS, 2.4, 200Cv',6);
 
+-- UPDATE SEQUENCE
+SELECT setval('brand.brand_seq', (SELECT MAX(brand_id) FROM brand.brand));
+SELECT setval('brand.model_seq', (SELECT MAX(model_id) FROM brand.model));
+SELECT setval('brand.version_seq', (SELECT MAX(version_id) FROM brand.version));
+
